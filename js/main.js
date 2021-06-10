@@ -246,3 +246,17 @@ function animate() {
 
 init();
 animate();
+
+
+//resize event
+window.addEventListener('resize',e => {
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+  init();
+})
+
+//remove mouse position
+setInterval(_ => {
+  mouse.x = undefined;
+  mouse.y = undefined;
+},1000);
