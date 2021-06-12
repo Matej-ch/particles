@@ -1,5 +1,5 @@
 const canvas = document.getElementById('canvas1');
-const ctx = canvas.getContext('2d');
+const ctx = canvas.getContext('2d', { alpha: false });
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
@@ -10,6 +10,21 @@ let mouse = {
   y:null,
   radius: (canvas.height /100) * (canvas.width/100)
 }
+
+let runAnimation = {
+  value: true
+};
+
+document.getElementById('canvas1').addEventListener('click', function() {
+  // flip flag
+  runAnimation.value = !runAnimation.value;
+
+  if(runAnimation.value) {
+    //var date = new Date();
+    //var time = date.getTime();
+    animate();
+  }
+});
 
 window.addEventListener('mousemove',e => {
   mouse.x = e.x;
@@ -87,9 +102,9 @@ class Particle {
 
 function init() {
   particlesArray = [];
-  let numberOfParticles = (canvas.height * canvas.width) / 9000;
+  let numberOfParticles = Math.floor((canvas.height * canvas.width) / 9000);
   for(let i =0;i <numberOfParticles; i++) {
-    let size = (Math.random() * 5) + 1;
+    let size = (Math.random() * 7) + 2;
     let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
     let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
 
@@ -103,8 +118,11 @@ function init() {
 }
 
 function animate() {
-  requestAnimationFrame(animate);
-  ctx.clearRect(0,0,innerWidth,innerHeight);
+
+  if(runAnimation.value) {
+    requestAnimationFrame(animate);
+    ctx.clearRect(0,0,innerWidth,innerHeight);
+  }
 
   for (let i =0; i < particlesArray.length; i++) {
     particlesArray[i].update();
