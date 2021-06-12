@@ -16,12 +16,9 @@ let runAnimation = {
 };
 
 document.getElementById('canvas1').addEventListener('click', function() {
-  // flip flag
   runAnimation.value = !runAnimation.value;
 
   if(runAnimation.value) {
-    //var date = new Date();
-    //var time = date.getTime();
     animate();
   }
 });
@@ -76,8 +73,10 @@ class Particle {
     let dy = mouse.y - this.y;
     let distance = Math.sqrt(dx * dx + dy * dy);
     if (distance < mouse.radius + this.size) {
+      this.color = 'DarkOrange';
       if (mouse.x < this.x && this.x < canvas.width - this.size * 10) {
         this.x += 10;
+
       }
       if (mouse.x > this.x && this.x > this.size * 10) {
         this.x -= 10;
@@ -88,6 +87,8 @@ class Particle {
       if (mouse.y > this.y && this.y > this.size * 10) {
         this.y -= 10;
       }
+    } else {
+      this.color = 'gold';
     }
   }
 
@@ -122,12 +123,13 @@ function animate() {
   if(runAnimation.value) {
     requestAnimationFrame(animate);
     ctx.clearRect(0,0,innerWidth,innerHeight);
-  }
 
-  for (let i =0; i < particlesArray.length; i++) {
-    particlesArray[i].update();
+
+    for (let i =0; i < particlesArray.length; i++) {
+      particlesArray[i].update();
+    }
+    connect();
   }
-  connect();
 }
 
 function connect () {
@@ -139,7 +141,7 @@ function connect () {
       if(distance < (canvas.width / 7) * (canvas.height/7) ) {
         opacity = 1 - (distance/20000);
         ctx.strokeStyle = `rgba(255, 215, 0, ${opacity})`;
-        ctx.lineWidth = 1;
+        ctx.lineWidth = particlesArray[i].size / 5;
         ctx.beginPath();
         ctx.moveTo(particlesArray[i].x,particlesArray[i].y);
         ctx.lineTo(particlesArray[j].x,particlesArray[j].y);

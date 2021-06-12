@@ -5,7 +5,7 @@ ctx.canvas.height = window.innerHeight;
 
 let particlesArray = [];
 
-const colors = [
+const clrs = [
   'AntiqueWhite',
   'Aqua',
   'Aquamarine',
@@ -230,7 +230,7 @@ function init() {
     let dirX = (Math.random() * 0.2) - 0.1;
     let dirY = (Math.random() * 0.2) - 0.1;
 
-    let color = colors[Math.floor(Math.random() * colors.length)];
+    let color = clrs[Math.floor(Math.random() * clrs.length)];
     particlesArray.push(new Particle(x,y,dirX,dirY,size,color));
   }
 }
