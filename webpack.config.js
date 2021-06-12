@@ -1,49 +1,37 @@
-const path = require('path');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+//const path = require('path')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+
+const mode = process.env.NODE_ENV === 'production' ? 'production' : "development";
 
 module.exports = {
-  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
-
-  entry: "./src/js/particles.js",
-
-  devtool: "source-map", // only for development
-
+  mode: mode,
+  plugins: [new MiniCssExtractPlugin()],
+  //entry: './src/index.js', //not required
+  //output: {
+  //    filename: "bundle.js", //not required
+  //    path: path.resolve(__dirname,'public')
+  //},
   module: {
     rules: [
       {
-        test: /\.(png|jpe?g|gif|svg)$/i,
-        type: "asset/resource"
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          //without additional settings, this will reference .babelrc
+          loader: 'babel-loader'
+        }
       },
       {
-        test: /\.css$/i,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {publicPath: "" }
-          },
-          "css-loader","postcss-loader"],
-      }
+        test: /\.css$/, //css , scss, sass files
+        use: [MiniCssExtractPlugin.loader,"css-loader","postcss-loader"]
+      },
     ]
   },
 
-  plugins: [new MiniCssExtractPlugin(), new HtmlWebpackPlugin({
-    template: "/src/index.html"
-  })],
 
-  resolve: {
-    extensions: [".js"]
-  },
-
-  output: {
-    path: path.resolve(__dirname,'dist'), // not required if default path is dist
-    assetModuleFilename: "images/[hash][ext][query]"
-  },
+  devtool: 'source-map',
 
   devServer: {
-    contentBase: path.join(__dirname, 'dist'),
-    port: 9999,
-    compress: true,
-    hot: true
+    contentBase: './dist'
   }
 }
