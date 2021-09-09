@@ -1,5 +1,5 @@
 {
-  "name": "particles",
+  "name": "bg_particles",
   "version": "1.0.0",
   "description": "Particle background to use in on your website",
   "main": "src/index.js",
