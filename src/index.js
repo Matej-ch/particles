@@ -1,8 +1,8 @@
-import "./css/normalize.css";
 import "./css/main.css";
 import mouse from "./js/mouse";
 import Particle from "./js/Particle";
 import {canvas,ctx} from "./js/canvas";
+import PBackground from "./js/PBackground";
 
 let particlesArray = [];
 
@@ -88,3 +88,10 @@ window.addEventListener('resize',e => {
 
 init();
 animate();
+
+const bg = new PBackground({canvasSelector: '#canvas1'});
+bg.test();
+//vytvori instanciu celeho pozadia, nastavenia cez konstructor // rychlost, pozadie, enable disable mouse interaction
+
+
+module.exports.PBackground = PBackground;
