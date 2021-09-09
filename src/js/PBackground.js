@@ -17,6 +17,10 @@ import mouse from "./mouse";
  *
  * @param {number} particleCount Number of particles, Higher the number, LESS of the particles
  *
+ * @param {boolean} alpha Boolean that indicates if the canvas contains an alpha buffer.
+ *
+ * @param {string} bg Background of canvas
+ *
  * @constructor
  */
 class PBackground {
@@ -25,31 +29,36 @@ class PBackground {
                 canvasW = window.innerWidth,
                 canvasH = window.innerHeight,
                 runAnimation = { value: true},
-                particleCount = 9000} = {}) {
+                particleCount = 9000,alpha= false,
+                bg = 'black'} = {}) {
 
     this.canvasSelector = canvasSelector;
     this.canvas = document.querySelector(canvasSelector);
     this.canvas.width = canvasW;
     this.canvas.height = canvasH;
     this.runAnimation = runAnimation;
+    this.particlesArray = [];
+    this.particleCount = particleCount;
+    this.alpha = alpha;
 
     mouse.radius = (this.canvas.height /110) * (this.canvas.width/110);
 
-    this.setAlpha();
+    this.ctx = this.canvas.getContext('2d', {alpha: true});
 
-    this.ctx = this.canvas.getContext('2d', {alpha: this.alpha});
-  }
+    this.canvas.style.cssText = bg;
 
-  setAlpha(alpha = false) {
-    this.alpha = alpha;
+    this.initListeners();
   }
 
   initListeners() {
+
+    let instance = this;
+
     document.querySelector(this.canvasSelector).addEventListener('click', function () {
       this.runAnimation.value = !this.runAnimation.value;
 
       if (this.runAnimation.value) {
-        this.animate();
+        instance.animate();
       }
     });
 
@@ -67,13 +76,13 @@ class PBackground {
       this.canvas.width = innerWidth;
       this.canvas.height = innerHeight;
       mouse.radius = ((this.canvas.height / 100) * (this.canvas.height / 100));
-      //init();
+      this.init();
     })
   }
 
   init() {
-    let particlesArray = [];
-    let numberOfParticles = Math.floor((this.canvas.height * this.canvas.width) / 9000);
+    this.particlesArray = [];
+    let numberOfParticles = Math.floor((this.canvas.height * this.canvas.width) / this.particleCount);
 
     for (let i = 0; i < numberOfParticles; i++) {
       let size = (Math.random() * 7) + 2;
@@ -85,12 +94,41 @@ class PBackground {
 
       let color = 'gold';
 
-      particlesArray.push(new Particle(x, y, dirX, dirY, size, color));
+      this.particlesArray.push(new Particle({
+        x:x, y:y, dirX:dirX, dirY:dirY, size:size, color: color, canvas: this.canvas, ctx:this.ctx
+      }));
     }
   }
 
   animate() {
+    //if (this.runAnimation.value) {
+      requestAnimationFrame(() => this.animate());
+      this.ctx.clearRect(0, 0, innerWidth, innerHeight);
 
+      for (let i = 0; i < this.particlesArray.length; i++) {
+        this.particlesArray[i].update();
+      }
+      this.connect();
+    //}
+  }
+
+  connect() {
+    let opacity = 0.5;
+    for (let i = 0; i < this.particlesArray.length; i++) {
+      for (let j = i; j < this.particlesArray.length; j++) {
+        let distance = ((this.particlesArray[i].x - this.particlesArray[j].x) * (this.particlesArray[i].x - this.particlesArray[j].x)) + ((this.particlesArray[i].y - this.particlesArray[j].y) * (this.particlesArray[i].y - this.particlesArray[j].y));
+
+        if (distance < (this.canvas.width / 7) * (this.canvas.height / 7)) {
+          opacity = 1 - (distance / 20000);
+          this.ctx.strokeStyle = `rgba(255, 215, 0, ${opacity})`;
+          this.ctx.lineWidth = this.particlesArray[i].size / 5;
+          this.ctx.beginPath();
+          this.ctx.moveTo(this.particlesArray[i].x, this.particlesArray[i].y);
+          this.ctx.lineTo(this.particlesArray[j].x, this.particlesArray[j].y);
+          this.ctx.stroke();
+        }
+      }
+    }
   }
 }
 
