@@ -30,7 +30,7 @@ class PBackground {
                 canvasW = window.innerWidth,
                 canvasH = window.innerHeight,
                 runAnimation = { value: true},
-                particleCount = 200,alpha= false,
+                particleCount = 200,alpha= true,
                 bg = 'black'} = {}) {
 
     this.canvasSelector = canvasSelector;
@@ -41,12 +41,12 @@ class PBackground {
     this.particlesArray = [];
     this.particleCount = particleCount;
     this.alpha = alpha;
-    console.log(this.runAnimation);
+
     mouse.radius = (this.canvas.height /110) * (this.canvas.width/110);
 
     this.ctx = this.canvas.getContext('2d', {alpha: this.alpha});
 
-    this.canvas.style.cssText = bg;
+    this.canvas.style.cssText = `background:${bg}`;
 
     this.initListeners();
   }

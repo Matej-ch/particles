@@ -65,7 +65,7 @@ var PBackground = /*#__PURE__*/function () {
         _ref$particleCount = _ref.particleCount,
         particleCount = _ref$particleCount === void 0 ? 200 : _ref$particleCount,
         _ref$alpha = _ref.alpha,
-        alpha = _ref$alpha === void 0 ? false : _ref$alpha,
+        alpha = _ref$alpha === void 0 ? true : _ref$alpha,
         _ref$bg = _ref.bg,
         bg = _ref$bg === void 0 ? 'black' : _ref$bg;
 
@@ -79,12 +79,11 @@ var PBackground = /*#__PURE__*/function () {
     this.particlesArray = [];
     this.particleCount = particleCount;
     this.alpha = alpha;
-    console.log(this.runAnimation);
     _mouse__WEBPACK_IMPORTED_MODULE_1__.default.radius = this.canvas.height / 110 * (this.canvas.width / 110);
     this.ctx = this.canvas.getContext('2d', {
       alpha: this.alpha
     });
-    this.canvas.style.cssText = bg;
+    this.canvas.style.cssText = "background:".concat(bg);
     this.initListeners();
   }
 
@@ -423,11 +422,10 @@ __webpack_require__.r(__webpack_exports__);
 
 var bg = new _js_PBackground__WEBPACK_IMPORTED_MODULE_1__.default({
   canvasSelector: '#canvas1',
-  alpha: false
+  bg: 'linear-gradient(0turn, rgba(230, 100, 101, 1), rgba(145, 152, 229, 1))'
 });
 bg.init();
-bg.animate(); //vytvori instanciu celeho pozadia, nastavenia cez konstructor // rychlost, pozadie, enable disable mouse interaction
-//module.exports.PBackground = PBackground;
+bg.animate(); //module.exports.PBackground = PBackground;
 })();
 
 /******/ })()
