@@ -1,7 +1,7 @@
 import mouse from "./mouse";
 
 class Particle {
-  constructor({x,y,dirX,dirY,size,color,canvas,ctx}) {
+  constructor({x,y,dirX,dirY,size,color,canvas,ctx,collisionColor = 'DarkOrange'}) {
     this.x = x;
     this.y = y;
     this.dirX = dirX;
@@ -10,6 +10,7 @@ class Particle {
     this.color = color;
     this.canvas = canvas;
     this.ctx = ctx;
+    this.collisionColor = collisionColor;
   }
 
   draw() {
@@ -42,7 +43,7 @@ class Particle {
     let dy = mouse.y - this.y;
     let distance = Math.sqrt(dx * dx + dy * dy);
     if (distance < mouse.radius + this.size) {
-      this.color = 'DarkOrange';
+      this.color = this.collisionColor;
       if (mouse.x < this.x && this.x < this.canvas.width - this.size * 10) {
         this.x += 5;
 
@@ -56,8 +57,6 @@ class Particle {
       if (mouse.y > this.y && this.y > this.size * 10) {
         this.y -= 5;
       }
-    } else {
-      this.color = 'gold';
     }
   }
 

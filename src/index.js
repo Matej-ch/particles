@@ -1,7 +1,7 @@
 import "./css/main.css";
 import PBackground from "./js/PBackground";
 
-const bg = new PBackground({canvasSelector: '#canvas1'});
+const bg = new PBackground({canvasSelector: '#canvas1',alpha: false});
 bg.init();
 bg.animate();
 

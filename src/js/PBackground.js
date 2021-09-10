@@ -1,5 +1,6 @@
 import Particle from "./Particle";
 import mouse from "./mouse";
+import colors from "./colors";
 
 /**
  * Class for making particle background on canvas.
@@ -15,7 +16,7 @@ import mouse from "./mouse";
  *
  * @param {Object.<boolean>} runAnimation Enables animation of particles
  *
- * @param {number} particleCount Number of particles, Higher the number, LESS of the particles
+ * @param {number} particleCount Number of particles
  *
  * @param {boolean} alpha Boolean that indicates if the canvas contains an alpha buffer.
  *
@@ -29,7 +30,7 @@ class PBackground {
                 canvasW = window.innerWidth,
                 canvasH = window.innerHeight,
                 runAnimation = { value: true},
-                particleCount = 9000,alpha= false,
+                particleCount = 200,alpha= false,
                 bg = 'black'} = {}) {
 
     this.canvasSelector = canvasSelector;
@@ -40,10 +41,10 @@ class PBackground {
     this.particlesArray = [];
     this.particleCount = particleCount;
     this.alpha = alpha;
-
+    console.log(this.runAnimation);
     mouse.radius = (this.canvas.height /110) * (this.canvas.width/110);
 
-    this.ctx = this.canvas.getContext('2d', {alpha: true});
+    this.ctx = this.canvas.getContext('2d', {alpha: this.alpha});
 
     this.canvas.style.cssText = bg;
 
@@ -51,14 +52,11 @@ class PBackground {
   }
 
   initListeners() {
-
-    let instance = this;
-
-    document.querySelector(this.canvasSelector).addEventListener('click', function () {
+    document.querySelector(this.canvasSelector).addEventListener('click',  () => {
       this.runAnimation.value = !this.runAnimation.value;
 
       if (this.runAnimation.value) {
-        instance.animate();
+        this.animate();
       }
     });
 
@@ -82,7 +80,10 @@ class PBackground {
 
   init() {
     this.particlesArray = [];
-    let numberOfParticles = Math.floor((this.canvas.height * this.canvas.width) / this.particleCount);
+    let numberOfParticles = Math.floor(this.particleCount);//Math.floor((this.canvas.height * this.canvas.width) / this.particleCount);
+
+    let particleColor = colors[Math.floor(Math.random() * colors.length)];
+    let collisionColor = colors[Math.floor(Math.random() * colors.length)];
 
     for (let i = 0; i < numberOfParticles; i++) {
       let size = (Math.random() * 7) + 2;
@@ -92,16 +93,14 @@ class PBackground {
       let dirX = (Math.random() * 5) - 2.5;
       let dirY = (Math.random() * 5) - 2.5;
 
-      let color = 'gold';
-
       this.particlesArray.push(new Particle({
-        x:x, y:y, dirX:dirX, dirY:dirY, size:size, color: color, canvas: this.canvas, ctx:this.ctx
+        x:x, y:y, dirX:dirX, dirY:dirY, size:size, color: particleColor, canvas: this.canvas, ctx:this.ctx,collisionColor: collisionColor
       }));
     }
   }
 
   animate() {
-    //if (this.runAnimation.value) {
+    if (this.runAnimation.value) {
       requestAnimationFrame(() => this.animate());
       this.ctx.clearRect(0, 0, innerWidth, innerHeight);
 
@@ -109,7 +108,7 @@ class PBackground {
         this.particlesArray[i].update();
       }
       this.connect();
-    //}
+    }
   }
 
   connect() {
