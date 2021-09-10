@@ -84,7 +84,12 @@ var PBackground = /*#__PURE__*/function () {
     this.particleCount = particleCount;
     this.alpha = alpha;
     this.speedMod = speedMod;
-    _mouse__WEBPACK_IMPORTED_MODULE_1__.default.radius = this.canvas.height / 110 * (this.canvas.width / 110);
+    this.mouseInteraction = mouseInteraction;
+
+    if (this.mouseInteraction) {
+      _mouse__WEBPACK_IMPORTED_MODULE_1__.default.radius = this.canvas.height / 110 * (this.canvas.width / 110);
+    }
+
     this.ctx = this.canvas.getContext('2d', {
       alpha: this.alpha
     });
@@ -104,14 +109,18 @@ var PBackground = /*#__PURE__*/function () {
           _this.animate();
         }
       });
-      window.addEventListener('mousemove', function (e) {
-        _mouse__WEBPACK_IMPORTED_MODULE_1__.default.x = e.x;
-        _mouse__WEBPACK_IMPORTED_MODULE_1__.default.y = e.y;
-      });
-      window.addEventListener('mouseout', function (e) {
-        _mouse__WEBPACK_IMPORTED_MODULE_1__.default.x = undefined;
-        _mouse__WEBPACK_IMPORTED_MODULE_1__.default.y = undefined;
-      });
+
+      if (this.mouseInteraction) {
+        window.addEventListener('mousemove', function (e) {
+          _mouse__WEBPACK_IMPORTED_MODULE_1__.default.x = e.x;
+          _mouse__WEBPACK_IMPORTED_MODULE_1__.default.y = e.y;
+        });
+        window.addEventListener('mouseout', function (e) {
+          _mouse__WEBPACK_IMPORTED_MODULE_1__.default.x = undefined;
+          _mouse__WEBPACK_IMPORTED_MODULE_1__.default.y = undefined;
+        });
+      }
+
       window.addEventListener('resize', function (e) {
         _this.canvas.width = innerWidth;
         _this.canvas.height = innerHeight;
@@ -426,7 +435,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var bg = new _js_PBackground__WEBPACK_IMPORTED_MODULE_1__.default({
   canvasSelector: '#canvas1',
-  bg: 'linear-gradient(0turn, rgba(230, 100, 101, 1), rgba(145, 152, 229, 1))',
+  mouseInteraction: false,
+  bg: 'linear-gradient(0.15turn, rgb(223, 185, 106, 1), rgb(135, 190, 231, 1)90% )',
   speedMod: 1
 });
 bg.init();

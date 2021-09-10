@@ -46,8 +46,11 @@ class PBackground {
     this.particleCount = particleCount;
     this.alpha = alpha;
     this.speedMod = speedMod;
+    this.mouseInteraction = mouseInteraction;
 
-    mouse.radius = (this.canvas.height /110) * (this.canvas.width/110);
+    if(this.mouseInteraction) {
+      mouse.radius = (this.canvas.height /110) * (this.canvas.width/110);
+    }
 
     this.ctx = this.canvas.getContext('2d', {alpha: this.alpha});
 
@@ -65,15 +68,18 @@ class PBackground {
       }
     });
 
-    window.addEventListener('mousemove', e => {
-      mouse.x = e.x;
-      mouse.y = e.y;
-    });
+    if(this.mouseInteraction) {
+      window.addEventListener('mousemove', e => {
+        mouse.x = e.x;
+        mouse.y = e.y;
+      });
 
-    window.addEventListener('mouseout', e => {
-      mouse.x = undefined;
-      mouse.y = undefined;
-    });
+      window.addEventListener('mouseout', e => {
+        mouse.x = undefined;
+        mouse.y = undefined;
+      });
+    }
+
 
     window.addEventListener('resize', e => {
       this.canvas.width = innerWidth;
@@ -120,7 +126,9 @@ class PBackground {
     let opacity = 0.5;
     for (let i = 0; i < this.particlesArray.length; i++) {
       for (let j = i; j < this.particlesArray.length; j++) {
-        let distance = ((this.particlesArray[i].x - this.particlesArray[j].x) * (this.particlesArray[i].x - this.particlesArray[j].x)) + ((this.particlesArray[i].y - this.particlesArray[j].y) * (this.particlesArray[i].y - this.particlesArray[j].y));
+        let distance = (
+          (this.particlesArray[i].x - this.particlesArray[j].x) * (this.particlesArray[i].x - this.particlesArray[j].x)) +
+          ((this.particlesArray[i].y - this.particlesArray[j].y) * (this.particlesArray[i].y - this.particlesArray[j].y));
 
         if (distance < (this.canvas.width / 7) * (this.canvas.height / 7)) {
           opacity = 1 - (distance / 20000);
