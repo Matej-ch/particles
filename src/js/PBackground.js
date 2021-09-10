@@ -10,6 +10,8 @@ import colors from "./colors";
  *
  * @param {boolean} mouseInteraction Enables interaction between particles and cursor
  *
+ * @param {number} mouseRadius Size of radius around mouse
+ *
  * @param {number} canvasW width of canvas
  *
  * @param {number} canvasH height of canvas
@@ -20,22 +22,28 @@ import colors from "./colors";
  *
  * @param {boolean} alpha Boolean that indicates if the canvas contains an alpha buffer.
  *
- * @param {string} bg Background of canvas
+ * @param {string} bgColor Background of canvas
  *
- * @param {number} speed Speed of particles
+ * @param {number} speedMod Speed modifier of particles
+ *
+ * @param {array} lineColor Color of connecting lines
  *
  * @constructor
  */
 class PBackground {
-  constructor({canvasSelector = '#canvas',
+  constructor({
+                canvasSelector = '#canvas',
                 mouseInteraction = true,
+                mouseRadius = 100,
                 canvasW = window.innerWidth,
                 canvasH = window.innerHeight,
-                runAnimation = { value: true},
+                runAnimation = {value: true},
                 particleCount = 200,
-                alpha= true,
+                alpha = true,
                 speedMod = 5,
-                bg = 'black'} = {}) {
+                bgColor = 'black',
+                lineColor = null
+              } = {}) {
 
     this.canvasSelector = canvasSelector;
     this.canvas = document.querySelector(canvasSelector);
@@ -48,19 +56,34 @@ class PBackground {
     this.speedMod = speedMod;
     this.mouseInteraction = mouseInteraction;
 
-    if(this.mouseInteraction) {
-      mouse.radius = (this.canvas.height /110) * (this.canvas.width/110);
+    if (this.mouseInteraction) {
+      mouse.radius = mouseRadius;
     }
+
+    if (lineColor) {
+      this.lineColor = {
+        r: lineColor[0],
+        g: lineColor[1],
+        b: lineColor[2],
+      };
+    } else {
+      this.lineColor = {
+        r: Math.random() * 256,
+        g: Math.random() * 256,
+        b: Math.random() * 256,
+      };
+    }
+
 
     this.ctx = this.canvas.getContext('2d', {alpha: this.alpha});
 
-    this.canvas.style.cssText = `background:${bg}`;
+    this.canvas.style.cssText = `background:${bgColor}`;
 
     this.initListeners();
   }
 
   initListeners() {
-    document.querySelector(this.canvasSelector).addEventListener('click',  () => {
+    document.querySelector(this.canvasSelector).addEventListener('click', () => {
       this.runAnimation.value = !this.runAnimation.value;
 
       if (this.runAnimation.value) {
@@ -68,7 +91,7 @@ class PBackground {
       }
     });
 
-    if(this.mouseInteraction) {
+    if (this.mouseInteraction) {
       window.addEventListener('mousemove', e => {
         mouse.x = e.x;
         mouse.y = e.y;
@@ -105,7 +128,15 @@ class PBackground {
       let dirY = (Math.random() * this.speedMod) - (this.speedMod / 2);
 
       this.particlesArray.push(new Particle({
-        x:x, y:y, dirX:dirX, dirY:dirY, size:size, color: particleColor, canvas: this.canvas, ctx:this.ctx,collisionColor: collisionColor
+        x: x,
+        y: y,
+        dirX: dirX,
+        dirY: dirY,
+        size: size,
+        color: particleColor,
+        canvas: this.canvas,
+        ctx: this.ctx,
+        collisionColor: collisionColor
       }));
     }
   }
@@ -127,12 +158,12 @@ class PBackground {
     for (let i = 0; i < this.particlesArray.length; i++) {
       for (let j = i; j < this.particlesArray.length; j++) {
         let distance = (
-          (this.particlesArray[i].x - this.particlesArray[j].x) * (this.particlesArray[i].x - this.particlesArray[j].x)) +
+            (this.particlesArray[i].x - this.particlesArray[j].x) * (this.particlesArray[i].x - this.particlesArray[j].x)) +
           ((this.particlesArray[i].y - this.particlesArray[j].y) * (this.particlesArray[i].y - this.particlesArray[j].y));
 
         if (distance < (this.canvas.width / 7) * (this.canvas.height / 7)) {
           opacity = 1 - (distance / 20000);
-          this.ctx.strokeStyle = `rgba(255, 215, 0, ${opacity})`;
+          this.ctx.strokeStyle = `rgba(${this.lineColor.r}, ${this.lineColor.g}, ${this.lineColor.b}, ${opacity})`;
           this.ctx.lineWidth = this.particlesArray[i].size / 5;
           this.ctx.beginPath();
           this.ctx.moveTo(this.particlesArray[i].x, this.particlesArray[i].y);
