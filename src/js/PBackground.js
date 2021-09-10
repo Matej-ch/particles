@@ -22,6 +22,8 @@ import colors from "./colors";
  *
  * @param {string} bg Background of canvas
  *
+ * @param {number} speed Speed of particles
+ *
  * @constructor
  */
 class PBackground {
@@ -30,7 +32,9 @@ class PBackground {
                 canvasW = window.innerWidth,
                 canvasH = window.innerHeight,
                 runAnimation = { value: true},
-                particleCount = 200,alpha= true,
+                particleCount = 200,
+                alpha= true,
+                speedMod = 5,
                 bg = 'black'} = {}) {
 
     this.canvasSelector = canvasSelector;
@@ -41,6 +45,7 @@ class PBackground {
     this.particlesArray = [];
     this.particleCount = particleCount;
     this.alpha = alpha;
+    this.speedMod = speedMod;
 
     mouse.radius = (this.canvas.height /110) * (this.canvas.width/110);
 
@@ -80,7 +85,7 @@ class PBackground {
 
   init() {
     this.particlesArray = [];
-    let numberOfParticles = Math.floor(this.particleCount);//Math.floor((this.canvas.height * this.canvas.width) / this.particleCount);
+    let numberOfParticles = Math.floor(this.particleCount);
 
     let particleColor = colors[Math.floor(Math.random() * colors.length)];
     let collisionColor = colors[Math.floor(Math.random() * colors.length)];
@@ -90,8 +95,8 @@ class PBackground {
       let x = (Math.random() * ((this.canvas.width - size * 2) - (size * 2)) + size * 2);
       let y = (Math.random() * ((this.canvas.height - size * 2) - (size * 2)) + size * 2);
 
-      let dirX = (Math.random() * 5) - 2.5;
-      let dirY = (Math.random() * 5) - 2.5;
+      let dirX = (Math.random() * this.speedMod) - (this.speedMod / 2);
+      let dirY = (Math.random() * this.speedMod) - (this.speedMod / 2);
 
       this.particlesArray.push(new Particle({
         x:x, y:y, dirX:dirX, dirY:dirY, size:size, color: particleColor, canvas: this.canvas, ctx:this.ctx,collisionColor: collisionColor

@@ -45,17 +45,17 @@ class Particle {
     if (distance < mouse.radius + this.size) {
       this.color = this.collisionColor;
       if (mouse.x < this.x && this.x < this.canvas.width - this.size * 10) {
-        this.x += 5;
+        this.x += 3;
 
       }
       if (mouse.x > this.x && this.x > this.size * 10) {
-        this.x -= 5;
+        this.x -= 3;
       }
       if (mouse.y < this.y && this.y < this.canvas.height - this.size * 10) {
-        this.y += 5;
+        this.y += 3;
       }
       if (mouse.y > this.y && this.y > this.size * 10) {
-        this.y -= 5;
+        this.y -= 3;
       }
     }
   }

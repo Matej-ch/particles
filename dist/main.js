@@ -44,6 +44,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
  *
  * @param {string} bg Background of canvas
  *
+ * @param {number} speed Speed of particles
+ *
  * @constructor
  */
 
@@ -66,6 +68,8 @@ var PBackground = /*#__PURE__*/function () {
         particleCount = _ref$particleCount === void 0 ? 200 : _ref$particleCount,
         _ref$alpha = _ref.alpha,
         alpha = _ref$alpha === void 0 ? true : _ref$alpha,
+        _ref$speedMod = _ref.speedMod,
+        speedMod = _ref$speedMod === void 0 ? 5 : _ref$speedMod,
         _ref$bg = _ref.bg,
         bg = _ref$bg === void 0 ? 'black' : _ref$bg;
 
@@ -79,6 +83,7 @@ var PBackground = /*#__PURE__*/function () {
     this.particlesArray = [];
     this.particleCount = particleCount;
     this.alpha = alpha;
+    this.speedMod = speedMod;
     _mouse__WEBPACK_IMPORTED_MODULE_1__.default.radius = this.canvas.height / 110 * (this.canvas.width / 110);
     this.ctx = this.canvas.getContext('2d', {
       alpha: this.alpha
@@ -119,8 +124,7 @@ var PBackground = /*#__PURE__*/function () {
     key: "init",
     value: function init() {
       this.particlesArray = [];
-      var numberOfParticles = Math.floor(this.particleCount); //Math.floor((this.canvas.height * this.canvas.width) / this.particleCount);
-
+      var numberOfParticles = Math.floor(this.particleCount);
       var particleColor = _colors__WEBPACK_IMPORTED_MODULE_2__.default[Math.floor(Math.random() * _colors__WEBPACK_IMPORTED_MODULE_2__.default.length)];
       var collisionColor = _colors__WEBPACK_IMPORTED_MODULE_2__.default[Math.floor(Math.random() * _colors__WEBPACK_IMPORTED_MODULE_2__.default.length)];
 
@@ -128,8 +132,8 @@ var PBackground = /*#__PURE__*/function () {
         var size = Math.random() * 7 + 2;
         var x = Math.random() * (this.canvas.width - size * 2 - size * 2) + size * 2;
         var y = Math.random() * (this.canvas.height - size * 2 - size * 2) + size * 2;
-        var dirX = Math.random() * 5 - 2.5;
-        var dirY = Math.random() * 5 - 2.5;
+        var dirX = Math.random() * this.speedMod - this.speedMod / 2;
+        var dirY = Math.random() * this.speedMod - this.speedMod / 2;
         this.particlesArray.push(new _Particle__WEBPACK_IMPORTED_MODULE_0__.default({
           x: x,
           y: y,
@@ -272,19 +276,19 @@ var Particle = /*#__PURE__*/function () {
         this.color = this.collisionColor;
 
         if (_mouse__WEBPACK_IMPORTED_MODULE_0__.default.x < this.x && this.x < this.canvas.width - this.size * 10) {
-          this.x += 5;
+          this.x += 3;
         }
 
         if (_mouse__WEBPACK_IMPORTED_MODULE_0__.default.x > this.x && this.x > this.size * 10) {
-          this.x -= 5;
+          this.x -= 3;
         }
 
         if (_mouse__WEBPACK_IMPORTED_MODULE_0__.default.y < this.y && this.y < this.canvas.height - this.size * 10) {
-          this.y += 5;
+          this.y += 3;
         }
 
         if (_mouse__WEBPACK_IMPORTED_MODULE_0__.default.y > this.y && this.y > this.size * 10) {
-          this.y -= 5;
+          this.y -= 3;
         }
       }
     }
@@ -422,7 +426,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var bg = new _js_PBackground__WEBPACK_IMPORTED_MODULE_1__.default({
   canvasSelector: '#canvas1',
-  bg: 'linear-gradient(0turn, rgba(230, 100, 101, 1), rgba(145, 152, 229, 1))'
+  bg: 'linear-gradient(0turn, rgba(230, 100, 101, 1), rgba(145, 152, 229, 1))',
+  speedMod: 1
 });
 bg.init();
 bg.animate(); //module.exports.PBackground = PBackground;
