@@ -50,15 +50,18 @@ class PBackground {
 
     this.canvasSelector = canvasSelector;
     this.canvas = document.querySelector(canvasSelector);
-    this.canvas.width = canvasW;
-    this.canvas.height = canvasH;
     this.runAnimation = runAnimation;
     this.particlesArray = [];
     this.particleCount = particleCount;
     this.alpha = alpha;
     this.speedMod = speedMod;
     this.mouseInteraction = mouseInteraction;
-    this.lineModifier = lineModifier
+    this.lineModifier = lineModifier;
+    this.canvasW = canvasW;
+    this.canvasH = canvasH;
+
+    this.canvas.width = this.canvasW;
+    this.canvas.height = this.canvasH;
 
     if (this.mouseInteraction) {
       this.mouseRadius = mouseRadius;
@@ -110,8 +113,18 @@ class PBackground {
 
 
     window.addEventListener('resize', e => {
-      this.canvas.width = innerWidth;
-      this.canvas.height = innerHeight;
+      if(this.canvas.width > window.innerWidth) {
+        this.canvas.width = window.innerWidth;
+      } else {
+        this.canvas.width = this.canvasW;
+      }
+
+      if(this.canvas.height > window.innerHeight) {
+        this.canvas.height = window.innerHeight;
+      } else {
+        this.canvas.height = this.canvasH;
+      }
+
       mouse.radius = ((this.canvas.height / this.mouseRadius) * (this.canvas.height / this.mouseRadius));
       this.init();
     })
