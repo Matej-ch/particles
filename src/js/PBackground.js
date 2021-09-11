@@ -16,7 +16,7 @@ import colors from "./colors";
  *
  * @param {number} canvasH height of canvas
  *
- * @param {Object.<boolean>} runAnimation Enables animation of particles
+ * @param {Object<boolean>} runAnimation Enables animation of particles
  *
  * @param {number} particleCount Number of particles
  *
@@ -26,7 +26,9 @@ import colors from "./colors";
  *
  * @param {number} speedMod Speed modifier of particles
  *
- * @param {array} lineColor Color of connecting lines
+ * @param {Array<number>} lineColor Color of connecting lines
+ *
+ * @param {number} lineModifier Distance of line when to connect , lower number shorter distance
  *
  * @constructor
  */
@@ -42,7 +44,8 @@ class PBackground {
                 alpha = true,
                 speedMod = 5,
                 bgColor = 'black',
-                lineColor = null
+                lineColor = null,
+                lineModifier= 20000,
               } = {}) {
 
     this.canvasSelector = canvasSelector;
@@ -55,9 +58,11 @@ class PBackground {
     this.alpha = alpha;
     this.speedMod = speedMod;
     this.mouseInteraction = mouseInteraction;
+    this.lineModifier = lineModifier
 
     if (this.mouseInteraction) {
-      mouse.radius = mouseRadius;
+      this.mouseRadius = mouseRadius;
+      mouse.radius = this.mouseRadius;
     }
 
     if (lineColor) {
@@ -107,7 +112,7 @@ class PBackground {
     window.addEventListener('resize', e => {
       this.canvas.width = innerWidth;
       this.canvas.height = innerHeight;
-      mouse.radius = ((this.canvas.height / 100) * (this.canvas.height / 100));
+      mouse.radius = ((this.canvas.height / this.mouseRadius) * (this.canvas.height / this.mouseRadius));
       this.init();
     })
   }
@@ -162,7 +167,7 @@ class PBackground {
           ((this.particlesArray[i].y - this.particlesArray[j].y) * (this.particlesArray[i].y - this.particlesArray[j].y));
 
         if (distance < (this.canvas.width / 7) * (this.canvas.height / 7)) {
-          opacity = 1 - (distance / 20000);
+          opacity = 1 - (distance / this.lineModifier);
           this.ctx.strokeStyle = `rgba(${this.lineColor.r}, ${this.lineColor.g}, ${this.lineColor.b}, ${opacity})`;
           this.ctx.lineWidth = this.particlesArray[i].size / 5;
           this.ctx.beginPath();
