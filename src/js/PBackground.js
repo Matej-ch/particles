@@ -28,6 +28,8 @@ import colors from "./colors";
  *
  * @param {Array<number>} lineColor Color of connecting lines
  *
+ * @param {string} particleColor Color of particles
+ *
  * @param {number} lineModifier Distance of line when to connect , lower number shorter distance
  *
  * @constructor
@@ -45,6 +47,7 @@ class PBackground {
                 speedMod = 5,
                 bgColor = 'black',
                 lineColor = null,
+                particleColor = null,
                 lineModifier= 20000,
               } = {}) {
 
@@ -82,6 +85,7 @@ class PBackground {
       };
     }
 
+    this.particleColor = particleColor;
 
     this.ctx = this.canvas.getContext('2d', {alpha: this.alpha});
 
@@ -134,7 +138,11 @@ class PBackground {
     this.particlesArray = [];
     let numberOfParticles = Math.floor(this.particleCount);
 
-    let particleColor = colors[Math.floor(Math.random() * colors.length)];
+    let particleColor =  colors[Math.floor(Math.random() * colors.length)];
+    if(this.particleColor) {
+      particleColor = this.particleColor;
+    }
+
     let collisionColor = colors[Math.floor(Math.random() * colors.length)];
 
     for (let i = 0; i < numberOfParticles; i++) {
