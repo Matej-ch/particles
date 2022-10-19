@@ -1,6 +1,6 @@
 {
   "name": "@mtjch/bg_particles",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Particle background to use in on your website",
   "main": "src/index.js",
   "publishConfig": {

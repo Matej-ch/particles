@@ -96,9 +96,7 @@ class PBackground {
 
   initListeners() {
     document.querySelector(this.canvasSelector).addEventListener('click', () => {
-      this.runAnimation.value = !this.runAnimation.value;
-
-      if (this.runAnimation.value) {
+      if (this.runAnimation.value === true) {
         this.animate();
       }
     });
@@ -168,15 +166,16 @@ class PBackground {
   }
 
   animate() {
-    if (this.runAnimation.value) {
+    if (this.runAnimation.value === true) {
       requestAnimationFrame(() => this.animate());
-      this.ctx.clearRect(0, 0, innerWidth, innerHeight);
-
-      for (let i = 0; i < this.particlesArray.length; i++) {
-        this.particlesArray[i].update();
-      }
-      this.connect();
     }
+
+    this.ctx.clearRect(0, 0, innerWidth, innerHeight);
+
+    for (let i = 0; i < this.particlesArray.length; i++) {
+      this.particlesArray[i].update();
+    }
+    this.connect();
   }
 
   connect() {

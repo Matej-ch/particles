@@ -9,6 +9,7 @@ const bg = new PBackground({
   //canvasH: 500,
   mouseInteraction: false,
   speedMod: 0,
+  runAnimation: {value: false},
   particleCount: 500,
   lineColor: [85, 147, 247]});
 bg.init();
